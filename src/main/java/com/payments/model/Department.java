@@ -3,16 +3,15 @@ package main.java.com.payments.model;
 public class Department {
     private Integer id;
     private String name;
-    private Integer responsibleAgentId;
 
-    public Department(Integer id, String name, Integer responsibleAgentId) {
+    public Department(Integer id, String name) {
         this.id = id;
         this.name = name;
-        this.responsibleAgentId = responsibleAgentId;
+
     }
 
     public Department(String name) {
-        this(null, name, null);
+        this(null, name);
     }
 
     public Integer getId() {
@@ -31,17 +30,11 @@ public class Department {
         this.name = name;
     }
 
-    public Integer getResponsibleAgentId() {
-        return responsibleAgentId;
-    }
 
-    public void setResponsibleAgentId(Integer responsibleAgentId) {
-        this.responsibleAgentId = responsibleAgentId;
-    }
 
     @Override
     public String toString() {
-        return String.format("Department[id=%d, name=%s, responsibleAgentId=%s]",
-                id, name, responsibleAgentId==null?"N/A":responsibleAgentId.toString());
+        return String.format("Department[id=%d, name=%s]",
+                id, name.toString());
     }
 }

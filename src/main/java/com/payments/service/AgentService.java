@@ -64,6 +64,18 @@ public class AgentService implements IAgentService {
             throw new RuntimeException(e);
         }
     }
+
+    public Optional<Agent> authenticate(String email, String password) {
+        try {
+            return agentRepo.findAll().stream()
+                    .filter(a -> a.getEmail().equals(email) && a.getPassword().equals(password))
+                    .findFirst();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }
 
 
