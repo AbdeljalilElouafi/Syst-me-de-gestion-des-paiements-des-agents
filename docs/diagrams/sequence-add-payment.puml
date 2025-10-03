@@ -1,0 +1,16 @@
+@startuml
+actor Responsable
+participant ConsoleController
+participant PaymentService
+participant PaymentRepository
+database DB
+
+Responsable -> ConsoleController : choisir "Ajouter paiement"
+ConsoleController -> PaymentService : addPayment(paymentData)
+PaymentService -> PaymentRepository : save(payment)
+PaymentRepository -> DB : INSERT paiement
+DB --> PaymentRepository : id généré
+PaymentRepository --> PaymentService : paiement enregistré
+PaymentService --> ConsoleController : paiement enregistré
+ConsoleController --> Responsable : "Paiement ajouté avec succès"
+@enduml
