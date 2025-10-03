@@ -19,6 +19,7 @@ public class DepartmentService implements IDepartmentService {
         try {
             return deptRepo.save(d);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

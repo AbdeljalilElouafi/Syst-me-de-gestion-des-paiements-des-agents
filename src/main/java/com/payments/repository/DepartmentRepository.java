@@ -16,11 +16,9 @@ public class DepartmentRepository implements IDepartmentRepository {
 
     @Override
     public Department save(Department department) throws SQLException {
-        String sql = "INSERT INTO department (name, responsible_agent_id) VALUES (?, ?)";
+        String sql = "INSERT INTO department (name) VALUES (?)";
         try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, department.getName());
-            if (department.getResponsibleAgentId() == null) ps.setNull(2, Types.INTEGER);
-            else ps.setInt(2, department.getResponsibleAgentId());
             ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) department.setId(rs.getInt(1));
@@ -31,13 +29,12 @@ public class DepartmentRepository implements IDepartmentRepository {
 
     @Override
     public Optional<Department> findById(int id) throws SQLException {
-        String sql = "SELECT id, name, responsible_agent_id FROM department WHERE id = ?";
+        String sql = "SELECT id, name FROM department WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    Department d = new Department(rs.getInt("id"), rs.getString("name"),
-                            rs.getObject("responsible_agent_id") == null ? null : rs.getInt("responsible_agent_id"));
+                    Department d = new Department(rs.getInt("id"), rs.getString("name"));
                     return Optional.of(d);
                 }
             }
@@ -48,12 +45,11 @@ public class DepartmentRepository implements IDepartmentRepository {
     @Override
     public List<Department> findAll() throws SQLException {
         List<Department> list = new ArrayList<>();
-        String sql = "SELECT id, name, responsible_agent_id FROM department";
+        String sql = "SELECT id, name FROM department";
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                Department d = new Department(rs.getInt("id"), rs.getString("name"),
-                        rs.getObject("responsible_agent_id") == null ? null : rs.getInt("responsible_agent_id"));
+                Department d = new Department(rs.getInt("id"), rs.getString("name"));
                 list.add(d);
             }
         }
@@ -62,11 +58,9 @@ public class DepartmentRepository implements IDepartmentRepository {
 
     @Override
     public void update(Department department) throws SQLException {
-        String sql = "UPDATE department SET name=?, responsible_agent_id=? WHERE id=?";
+        String sql = "UPDATE department SET name=? WHERE id=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, department.getName());
-            if (department.getResponsibleAgentId() == null) ps.setNull(2, Types.INTEGER);
-            else ps.setInt(2, department.getResponsibleAgentId());
             ps.setInt(3, department.getId());
             ps.executeUpdate();
         }
